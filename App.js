@@ -1,73 +1,84 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Alert} from 'react-native';
 
 export default function App() {
-  const [text, onChangeText] = React.useState('Ingrese su celular');
-  const [number, onChangeNumber] = React.useState('');
+  const [enteredGoal, setEnteredText] = useState('')
+  const  [courseGoals, setCourseGoals] = useState([]);
+
+  function goalInputHandler(enteredText){
+    setEnteredText(enteredText)
+  }
+  
+  function addGoalHandler(){
+    setCourseGoals((currentCouseGoals) => [...courseGoals, enteredGoal]);
+    setEnteredText('');
+  }
 
   return (
-    <View style={{
-        padding: 50,
-        flexDirection:'row',
-        width:'80%',
-        height:300,
-        justifyContent:'space-around',
-        alignItems:'stretch'
-      }}>      
-      <View style={{
-        backgroundColor:'red',        
-        justifyContent: 'center',        
-        flex:1,
-        flexDirection:'row',
+    <View style={styles.appContainer}>      
+     <View style={styles.inputContainer}>
+        <TextInput
+          onChangeText={goalInputHandler}
+          style={styles.textInput}
+          placeholder="Your course goal!!!"
+          value={enteredGoal} />
+        <Button
+            onPress={addGoalHandler}
+            color="#841584"
+            title="Add Goal"
+            accessibilityLabel="Holitas de mar from piura"/>
+      </View>      
+      <View style={styles.goalsContainer}>
+        <Text>List of Goals!</Text>
+        {courseGoals.map((goal, indice) => (
+          <View key={indice} style={styles.goalItem} >
+            <Text style={styles.goalText}>{goal}</Text>
+          </View>          
+        ))}
         
-        alignItems: 'center'
-      }}>
-        <Text>1</Text>
-        <Text>other</Text>
-      </View>
-      <View style={{
-        backgroundColor:'blue',         
-        justifyContent: 'center',
-        flex:1,
-        alignItems: 'center'
-      }}>
-        <Text>2</Text>
-      </View>
-      <View style={{
-        backgroundColor:'green',        
-        justifyContent: 'center',
-        flex:1,
-        alignItems: 'center'
-      }}>
-        <Text>3</Text>
-      </View>          
+      </View> 
     </View>
   );
 }
 
 const styles = StyleSheet.create({  
   appContainer: {
-    padding:50,
+    flex:1,
+    paddingTop:50,
+    paddingHorizontal:16,    
+    backgroundColor:'#f1eed3ec',
+
   },
   inputContainer: {
+    flex:1,
     flexDirection:'row',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    alignItems: 'center',
+    marginBottom:24,
+    borderBottomWidth:1,
+    borderBottomColor:'#cccccc'
   },
   textInput:{
     borderWidth:1,
     borderColor: '#cccccc',
-    width:'80%',
+    width:'70%',
     marginRight: 8,
     padding: 8,
+  },
+  goalsContainer:{
+    flex:5,
+  },
+  goalItem:{
+    color:'#e4e4e4',
+    margin:8,
+    padding:8,
+    borderRadius:6,
+    backgroundColor:'#5a038dcc'    
+  },
+  goalText:{
+    color:'white',
   }
+
 });
 
-{/* <View style={styles.inputContainer}>
-        <TextInput style={styles.textInput} placeholder="Your course goal!!!" />
-        <Button title="Add Goal"/>
-      </View>
-      <View></View>
-      <View>
-        <Text>List of Goals!</Text>
-      </View> */}
